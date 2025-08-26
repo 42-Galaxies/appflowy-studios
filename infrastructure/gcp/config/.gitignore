@@ -1,0 +1,5 @@
+# Ignore actual environment configuration
+env.sh
+
+# Keep the template
+!env.sh.template

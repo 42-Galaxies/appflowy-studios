@@ -1,0 +1,440 @@
+{
+  "T1.1": {
+    "id": "T1.1",
+    "title": "Set up GCP project and billing alerts.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Set up GCP project and billing alerts.",
+    "milestone": "M1",
+    "created": "2025-08-25T09:19:26.487613",
+    "updated": "2025-08-25T09:19:26.487621",
+    "details": "## Task T1.1: GCP Project Setup [task-id: T1.1]\n\n*   **Objective:** To create and configure a new, dedicated Google Cloud Platform project to house all resources for AppFlowy-Studios.\n*   **Outcome:** A GCP project is created, linked to billing, and has all necessary APIs enabled. The project ID is exported as an environment variable for subsequent commands.\n\n*   **Implementation Steps:**\n\n    1.  **Create the project:**\n        ```bash\n        gcloud projects create appflowy-studios-prod --name=\"AppFlowy Studios Production\"\n        ```\n        *   **Documentation:** [gcloud projects create](https://cloud.google.com/sdk/gcloud/reference/projects/create)\n\n    2.  **Set the project for the current session:**\n        ```bash\n        export PROJECT_ID=\"appflowy-studios-prod\"\n        gcloud config set project $PROJECT_ID\n        ```\n\n    3.  **Link to a billing account:**\n        *First, list your available billing accounts:*\n        ```bash\n        gcloud beta billing accounts list\n        ```\n        *Then, link the project to your chosen billing account (replace `BILLING_ACCOUNT_ID`):*\n        ```bash\n        gcloud beta billing projects link $PROJECT_ID --billing-account=BILLING_ACCOUNT_ID\n        ```\n        *   **Documentation:** [gcloud beta billing projects link](https://cloud.google.com/sdk/gcloud/reference/beta/billing/projects/link)\n\n    4.  **Enable required APIs:**\n        ```bash\n        gcloud services enable compute.googleapis.com cloudbuild.googleapis.com secretmanager.googleapis.com artifactregistry.googleapis.com\n        ```\n        *   **Documentation:** [gcloud services enable](https://cloud.google.com/sdk/gcloud/reference/services/enable)",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      },
+      {
+        "name": "Technical PRD",
+        "url": "../specifications/technical-prd-milestone-1.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T1.2": {
+    "id": "T1.2",
+    "title": "Write Terraform scripts for GKE, Cloud SQL, and Cloud Storag",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Write Terraform scripts for GKE, Cloud SQL, and Cloud Storage.",
+    "milestone": "M1",
+    "created": "2025-08-25T09:19:26.487628",
+    "updated": "2025-08-25T09:19:26.487631",
+    "details": "### Core Features\n| ID | Feature | Priority | Description |\n|----|---------|----------|-------------|\n| F1 | GCP Hosting for AppFlowy | Must Have | Deploy the official `AppFlowy-Cloud` container on GCP. [task-id: T1.2][priority: Must Have][status: To Do] |",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      },
+      {
+        "name": "Technical PRD",
+        "url": "../specifications/technical-prd-milestone-1.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T1.3": {
+    "id": "T1.3",
+    "title": "Create the Authentication Service microservice.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Create the Authentication Service microservice.",
+    "milestone": "M1",
+    "created": "2025-08-25T09:19:26.487636",
+    "updated": "2025-08-25T09:19:26.487638",
+    "details": "## Task T1.3: Configure Google Workspace Authentication [task-id: T1.3]\n\n*   **Objective:** To configure the AppFlowy-Cloud instance to use Google Workspace for authentication.\n*   **Outcome:** An `.env` file is created with the necessary credentials to enable Google authentication, and the `docker-compose.yml` is configured to use it.\n\n*   **Implementation Steps:**\n\n    1.  **Create a Google OAuth 2.0 Client ID:**\n        *   Follow the Google Cloud documentation to create an OAuth 2.0 Client ID for a web application.\n        *   Set the authorized redirect URI to `https://workspace.42galaxies.studio/api/auth/callback`.\n        *   **Documentation:** [Setting up OAuth 2.0](https://support.google.com/cloud/answer/6158849)\n\n    2.  **Create the `.env` file:**\n        *   Create a file named `.env` in the root of the AppFlowy-Cloud project.\n        *   Add the following environment variables to the file, replacing the values with your own:\n            ```\n            GOTRUE_EXTERNAL_GOOGLE_ENABLED=true\n            GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID=\"your-google-client-id\"\n            GOTRUE_EXTERNAL_GOOGLE_SECRET=\"your-google-client-secret\"\n            GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI=\"https://workspace.42galaxies.studio/api/auth/callback\"\n            ```\n        *   **Documentation:** [AppFlowy-Cloud README](https://github.com/AppFlowy-IO/AppFlowy-Cloud/blob/main/README.md)\n\n    3.  **Update `docker-compose.yml`:**\n        *   Ensure that the `docker-compose.yml` file is configured to use the `.env` file.\n        *   The `appflowy-cloud` service should have the `env_file` property set to `./.env`.\n",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      },
+      {
+        "name": "Technical PRD",
+        "url": "../specifications/technical-prd-milestone-1.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T1.4": {
+    "id": "T1.4",
+    "title": "Integrate Authentication Service with Google Workspace OAuth",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Integrate Authentication Service with Google Workspace OAuth.",
+    "milestone": "M1",
+    "created": "2025-08-25T09:19:26.487642",
+    "updated": "2025-08-25T09:19:26.487644",
+    "details": "This task is covered by T1.3 in the updated plan.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      },
+      {
+        "name": "Technical PRD",
+        "url": "../specifications/technical-prd-milestone-1.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T1.5": {
+    "id": "T1.5",
+    "title": "Set up a basic CI/CD pipeline for the Authentication Service",
+    "status": "todo",
+    "priority": "medium",
+    "project": "appflowy-studios",
+    "description": "Set up a basic CI/CD pipeline for the Authentication Service.",
+    "milestone": "M1",
+    "created": "2025-08-25T09:19:26.487648",
+    "updated": "2025-08-25T09:19:26.487650",
+    "details": "### Core Features\n| ID | Feature | Priority | Description |\n|----|---------|----------|-------------|\n| F3 | Subdomain Access | Must Have | Host the application on `workspace.42galaxies.studio`. [task-id: T1.5][priority: Must Have][status: To Do] |",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      },
+      {
+        "name": "Technical PRD",
+        "url": "../specifications/technical-prd-milestone-1.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.1": {
+    "id": "T2.1",
+    "title": "Fork the official AppFlowy repository.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Fork the official AppFlowy repository.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487657",
+    "updated": "2025-08-25T09:19:26.487659",
+    "details": "Fork the official AppFlowy repository to our own GitHub organization.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.2": {
+    "id": "T2.2",
+    "title": "Dockerize the forked AppFlowy backend.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Dockerize the forked AppFlowy backend.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487663",
+    "updated": "2025-08-25T09:19:26.487665",
+    "details": "Create a Dockerfile for the forked AppFlowy backend.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.3": {
+    "id": "T2.3",
+    "title": "Deploy the AppFlowy backend to the GKE cluster.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Deploy the AppFlowy backend to the GKE cluster.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487685",
+    "updated": "2025-08-25T09:19:26.487687",
+    "details": "Deploy the AppFlowy backend to the GKE cluster.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.4": {
+    "id": "T2.4",
+    "title": "Connect the AppFlowy backend to the Cloud SQL database.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Connect the AppFlowy backend to the Cloud SQL database.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487691",
+    "updated": "2025-08-25T09:19:26.487692",
+    "details": "Connect the AppFlowy backend to the Cloud SQL database.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.5": {
+    "id": "T2.5",
+    "title": "Configure Cloudflare and set up the `workspace.42galaxies.st",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Configure Cloudflare and set up the `workspace.42galaxies.studio` subdomain.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487696",
+    "updated": "2025-08-25T09:19:26.487698",
+    "details": "Configure Cloudflare and set up the `workspace.42galaxies.studio` subdomain.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T2.6": {
+    "id": "T2.6",
+    "title": "Integrate the AppFlowy backend with the Authentication Servi",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Integrate the AppFlowy backend with the Authentication Service.",
+    "milestone": "M2",
+    "created": "2025-08-25T09:19:26.487701",
+    "updated": "2025-08-25T09:19:26.487703",
+    "details": "Integrate the AppFlowy backend with the Authentication Service.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T3.1": {
+    "id": "T3.1",
+    "title": "Design the CLI tool and its commands.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Design the CLI tool and its commands.",
+    "milestone": "M3",
+    "created": "2025-08-25T09:19:26.487707",
+    "updated": "2025-08-25T09:19:26.487709",
+    "details": "Design the CLI tool and its commands.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T3.2": {
+    "id": "T3.2",
+    "title": "Implement the authentication flow for the CLI tool.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Implement the authentication flow for the CLI tool.",
+    "milestone": "M3",
+    "created": "2025-08-25T09:19:26.487712",
+    "updated": "2025-08-25T09:19:26.487714",
+    "details": "Implement the authentication flow for the CLI tool.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T3.3": {
+    "id": "T3.3",
+    "title": "Implement the file sync algorithm (three-way merge).",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Implement the file sync algorithm (three-way merge).",
+    "milestone": "M3",
+    "created": "2025-08-25T09:19:26.487717",
+    "updated": "2025-08-25T09:19:26.487719",
+    "details": "Implement the file sync algorithm (three-way merge).",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T3.4": {
+    "id": "T3.4",
+    "title": "Package the CLI tool for different operating systems.",
+    "status": "todo",
+    "priority": "medium",
+    "project": "appflowy-studios",
+    "description": "Package the CLI tool for different operating systems.",
+    "milestone": "M3",
+    "created": "2025-08-25T09:19:26.487726",
+    "updated": "2025-08-25T09:19:26.487728",
+    "details": "Package the CLI tool for different operating systems.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T3.5": {
+    "id": "T3.5",
+    "title": "Write documentation for the CLI tool.",
+    "status": "todo",
+    "priority": "low",
+    "project": "appflowy-studios",
+    "description": "Write documentation for the CLI tool.",
+    "milestone": "M3",
+    "created": "2025-08-25T09:19:26.487731",
+    "updated": "2025-08-25T09:19:26.487733",
+    "details": "Write documentation for the CLI tool.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.1": {
+    "id": "T4.1",
+    "title": "Research AppFlowy mobile client build and configuration.",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Research AppFlowy mobile client build and configuration.",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487739",
+    "updated": "2025-08-25T09:19:26.487741",
+    "details": "Research AppFlowy mobile client build and configuration.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.2": {
+    "id": "T4.2",
+    "title": "Set up a local build environment for the mobile client (iOS ",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Set up a local build environment for the mobile client (iOS & Android).",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487745",
+    "updated": "2025-08-25T09:19:26.487747",
+    "details": "Set up a local build environment for the mobile client (iOS & Android).",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.3": {
+    "id": "T4.3",
+    "title": "Configure the mobile client to connect to the production bac",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Configure the mobile client to connect to the production backend.",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487750",
+    "updated": "2025-08-25T09:19:26.487752",
+    "details": "Configure the mobile client to connect to the production backend.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.4": {
+    "id": "T4.4",
+    "title": "Test the mobile authentication flow with our custom auth ser",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Test the mobile authentication flow with our custom auth service.",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487755",
+    "updated": "2025-08-25T09:19:26.487757",
+    "details": "Test the mobile authentication flow with our custom auth service.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.5": {
+    "id": "T4.5",
+    "title": "Test core features (create, edit, sync) on the mobile client",
+    "status": "todo",
+    "priority": "critical",
+    "project": "appflowy-studios",
+    "description": "Test core features (create, edit, sync) on the mobile client.",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487761",
+    "updated": "2025-08-25T09:19:26.487763",
+    "details": "Test core features (create, edit, sync) on the mobile client.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  },
+  "T4.6": {
+    "id": "T4.6",
+    "title": "Document the mobile client setup and configuration process.",
+    "status": "todo",
+    "priority": "medium",
+    "project": "appflowy-studios",
+    "description": "Document the mobile client setup and configuration process.",
+    "milestone": "M4",
+    "created": "2025-08-25T09:19:26.487766",
+    "updated": "2025-08-25T09:19:26.487768",
+    "details": "Document the mobile client setup and configuration process.",
+    "links": [
+      {
+        "name": "PRD",
+        "url": "../specifications/prd.md"
+      }
+    ],
+    "subtasks": []
+  }
+}
