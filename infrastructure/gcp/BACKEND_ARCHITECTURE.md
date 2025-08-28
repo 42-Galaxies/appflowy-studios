@@ -36,6 +36,14 @@ We deploy only the essential services:
 - Nginx (reverse proxy)
 ```
 
+### Storage Strategy: Google Drive Integration
+Instead of S3/Minio for file storage, we'll use Google Drive:
+- **Native Integration**: Works with your existing Google Workspace
+- **Shared Storage**: All team members have access through 42galaxies.studio
+- **No Extra Cost**: Uses your existing Google Workspace storage
+- **Better Collaboration**: Files are accessible in Google Drive directly
+- **Simpler Setup**: No need for S3 credentials or Minio containers
+
 ### Benefits
 1. **Reliability**: Services start consistently without migration issues
 2. **Simplicity**: Fewer moving parts means easier debugging

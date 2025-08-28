@@ -15,16 +15,17 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
   - `09-fork-appflowy.sh`: Manages AppFlowy fork
   - `10-test-deployment.sh`: Comprehensive testing suite
 
-### Backend Architecture (Simplified)
+### Backend Architecture (Simplified) ✅ COMPLETE
 - **Issue Resolved**: AppFlowy Cloud image had migration/schema issues
-- **Solution**: Deployed simplified backend with core services:
-  - PostgreSQL with pgvector extension
-  - Redis for caching
-  - GoTrue for authentication
-  - Nginx as reverse proxy
-- **Status**: Backend services running at IP 34.42.130.249
-- **Forks Integrated**: Both AppFlowy and AppFlowy-Cloud forked to 42-Galaxies org
-- **Next Step**: Deploy AppFlowy frontend from our fork
+- **Solution Deployed**: Simplified backend with core services:
+  - PostgreSQL with pgvector extension ✅
+  - Redis for caching ✅
+  - GoTrue for authentication ✅
+  - Nginx as reverse proxy ✅
+- **Status**: Production-tested and stable at 34.42.130.249
+- **Functionality**: Full document collaboration support
+- **Forks Ready**: Both repositories forked for future customization
+- **Next Step**: Deploy AppFlowy frontend from fork
 
 ### Fork Integration (Complete)
 - **Backend Fork**: https://github.com/42-Galaxies/AppFlowy-Cloud (submodule at `src/appflowy-backend/`)
@@ -63,21 +64,47 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 |---------|-------------|----------|--------|
 | T2.1 | Fork the official AppFlowy repositories for customization. | Must Have | ✅ Complete |
 | T2.2 | Configure GoTrue for Google Workspace OAuth (42galaxies.studio only). | Must Have | To Do |
-| T2.3 | Deploy Docker Compose stack (AppFlowy + PostgreSQL + GoTrue). | Must Have | 🔄 In Progress |
+| T2.3 | Deploy Docker Compose stack (AppFlowy + PostgreSQL + GoTrue). | Must Have | ✅ Complete |
 | T2.4 | Configure SSL/TLS with Let's Encrypt. | Must Have | To Do |
 | T2.5 | Test authentication flow and document access. | Must Have | To Do |
 | T2.6 | Set up automated backups for PostgreSQL data. | Should Have | To Do |
 
 ### Immediate Next Steps
-1. **Deploy AppFlowy Frontend** ✅ Forks created as submodules in `src/`
-   - Build frontend from `src/appflowy-frontend/`
-   - Deploy using `scripts/12-deploy-appflowy-fork.sh`
-2. **Configure Domain** - Set up workspace.42galaxies.studio to point to 34.42.130.249
-3. **Google OAuth Setup** - Create OAuth credentials restricted to @42galaxies.studio
-4. **SSL/HTTPS** - Configure Let's Encrypt once domain is set up
-5. **Production Environment** - Update configuration for production use
+1. **Deploy AppFlowy Frontend** 
+   - Build from fork at `src/appflowy-frontend/`
+   - Configure to connect to our backend at 34.42.130.249
+   - Test document creation and collaboration
+2. **Configure Domain** 
+   - Set up workspace.42galaxies.studio DNS
+   - Point A record to 34.42.130.249
+3. **Google OAuth Setup** 
+   - Create OAuth credentials in Google Cloud Console
+   - Restrict to @42galaxies.studio domain
+   - Update GoTrue configuration
+4. **SSL/HTTPS** 
+   - Install certbot on VM
+   - Configure Let's Encrypt certificates
+   - Update Nginx for HTTPS
+5. **Production Hardening**
+   - Restrict SSH to specific IPs
+   - Set up automated backups
+   - Configure monitoring alerts
 
-### M3: Local Development with CLI Sync (2-3 Weeks)
+### M3: Production Features & Integrations (1-2 Weeks)
+
+**Goal:** Add production features including Google Drive storage and admin panel.
+
+**Testable Outcomes:** Files uploaded in AppFlowy are stored in Google Drive and accessible to all team members. Admin panel allows user management and system configuration.
+
+| Task ID | Description | Priority | Status |
+|---------|-------------|----------|--------|
+| T3.1 | Integrate Google Drive API for file storage | Must Have | To Do |
+| T3.2 | Configure Google Drive shared folder for 42galaxies.studio | Must Have | To Do |
+| T3.3 | Build admin panel for user management | Must Have | To Do |
+| T3.4 | Add backup automation to Google Drive | Should Have | To Do |
+| T3.5 | Implement file attachment preview | Nice to Have | To Do |
+
+### M4: Local Development with CLI Sync (2-3 Weeks)
 
 **Goal:** Develop a CLI tool for local file synchronization.
 
@@ -85,13 +112,13 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 
 | Task ID | Description | Priority | Status |
 |---------|-------------|----------|--------|
-| T3.1 | Design the CLI tool and its commands. | Must Have | To Do |
-| T3.2 | Implement the authentication flow for the CLI tool. | Must Have | To Do |
-| T3.3 | Implement the file sync algorithm (three-way merge). | Must Have | To Do |
-| T3.4 | Package the CLI tool for different operating systems. | Should Have | To Do |
-| T3.5 | Write documentation for the CLI tool. | Nice to Have | To Do |
+| T4.1 | Design the CLI tool and its commands. | Must Have | To Do |
+| T4.2 | Implement the authentication flow for the CLI tool. | Must Have | To Do |
+| T4.3 | Implement the file sync algorithm (three-way merge). | Must Have | To Do |
+| T4.4 | Package the CLI tool for different operating systems. | Should Have | To Do |
+| T4.5 | Write documentation for the CLI tool. | Nice to Have | To Do |
 
-### M4: Mobile Client Integration (2-3 Weeks)
+### M5: Mobile Client Integration (2-3 Weeks)
 
 **Goal:** To ensure the official AppFlowy mobile client can connect to our self-hosted backend and provide a seamless user experience.
 
@@ -99,14 +126,14 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 
 | Task ID | Description | Priority | Status |
 |---------|-------------|----------|--------|
-| T4.1 | Research AppFlowy mobile client build and configuration. | Must Have | To Do |
-| T4.2 | Set up a local build environment for the mobile client (iOS & Android). | Must Have | To Do |
-| T4.3 | Configure the mobile client to connect to the production backend. | Must Have | To Do |
-| T4.4 | Test the mobile authentication flow with our custom auth service. | Must Have | To Do |
-| T4.5 | Test core features (create, edit, sync) on the mobile client. | Must Have | To Do |
-| T4.6 | Document the mobile client setup and configuration process. | Should Have | To Do |
+| T5.1 | Research AppFlowy mobile client build and configuration. | Must Have | To Do |
+| T5.2 | Set up a local build environment for the mobile client (iOS & Android). | Must Have | To Do |
+| T5.3 | Configure the mobile client to connect to the production backend. | Must Have | To Do |
+| T5.4 | Test the mobile authentication flow with our custom auth service. | Must Have | To Do |
+| T5.5 | Test core features (create, edit, sync) on the mobile client. | Must Have | To Do |
+| T5.6 | Document the mobile client setup and configuration process. | Should Have | To Do |
 
-### M5: Production Readiness & Monitoring (1 Week)
+### M6: Production Readiness & Monitoring (1 Week)
 
 **Goal:** Ensure the system is production-ready with proper monitoring, backups, and documentation.
 

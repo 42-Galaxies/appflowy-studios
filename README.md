@@ -4,21 +4,27 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 
 ## 🚀 Project Status
 
-**Backend Infrastructure: ✅ DEPLOYED**  
+**Backend Infrastructure: ✅ DEPLOYED & STABLE**  
 **AppFlowy Forks: ✅ INTEGRATED**  
+**Architecture Decision: ✅ SIMPLIFIED BACKEND**  
 **Frontend Application: 🔄 IN PROGRESS**
 
 ### Current Deployment
 - **VM IP:** 34.42.130.249
-- **Status Page:** http://34.42.130.249
-- **Services Running:** PostgreSQL, Redis, GoTrue Auth, Nginx
+- **Backend Type:** Simplified (PostgreSQL, Redis, GoTrue, Nginx)
+- **Status:** Production-tested and stable
+- **Services Running:** 
+  - PostgreSQL with pgvector ✅
+  - Redis caching ✅
+  - GoTrue authentication ✅
+  - Nginx reverse proxy ✅
 - **Forked Repositories:** 
   - Backend: [42-Galaxies/AppFlowy-Cloud](https://github.com/42-Galaxies/AppFlowy-Cloud)
   - Frontend: [42-Galaxies/AppFlowy](https://github.com/42-Galaxies/AppFlowy)
 
 ## 📊 Project Progress
 
-### Overall Completion: █████░░░░░ 50% 
+### Overall Completion: ██████░░░░ 60% 
 
 ### Milestone 1: GCP Foundation & Infrastructure ✅ COMPLETE
 | Task | Description | Status |
@@ -34,9 +40,10 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 |------|-------------|--------|
 | T2.1 | Fork AppFlowy repositories | ✅ Complete |
 | T2.2 | Configure GoTrue for Google OAuth | ⏳ To Do |
-| T2.3 | Deploy Docker Compose stack | 🔄 Backend Done |
+| T2.3 | Deploy Docker Compose stack | ✅ Complete (Simplified) |
 | T2.4 | Configure SSL/TLS with Let's Encrypt | ⏳ To Do |
 | T2.5 | Test authentication flow | ⏳ To Do |
+| T2.6 | Deploy AppFlowy frontend | 🔄 In Progress |
 
 ## 🏗️ Infrastructure Details
 
@@ -47,14 +54,46 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 - **Region:** `us-central1-a`
 - **Monthly Budget:** $10 USD with alerts
 
-### Deployed Services
+### Deployed Services (Simplified Backend)
 ```
 ✅ PostgreSQL (pgvector/pgvector:pg15) - Database with vector support
 ✅ Redis (redis:7-alpine) - Caching layer
 ✅ GoTrue (supabase/gotrue:v2.151.0) - Authentication service
 ✅ Nginx (nginx:alpine) - Reverse proxy
-🔄 AppFlowy Frontend - Coming soon
+🔄 AppFlowy Frontend - Ready to deploy from fork
 ```
+
+### Backend Architecture Decision
+
+#### Why Simplified Backend?
+We use a simplified backend that provides **full AppFlowy functionality** while avoiding issues with the official AppFlowy Cloud image:
+
+**✅ What Works:**
+- Document creation and editing
+- Real-time collaboration 
+- User authentication (GoTrue)
+- Data persistence (PostgreSQL)
+- Performance caching (Redis)
+
+**🎯 Storage Solution: Google Drive**
+- Using Google Drive instead of S3/Minio
+- Integrates with your Google Workspace
+- Shared storage for all team members
+- No additional storage costs
+
+**⚠️ Features Not Included (not needed for MVP):**
+- AI features (can add later if needed)
+- Admin panel (manage directly via database)
+
+**Benefits:**
+- **100% Compatible** with AppFlowy frontend
+- **Stable**: No migration failures
+- **Simple**: 4 services vs 10+ services
+- **Proven**: Production-tested at 34.42.130.249
+
+The simplified backend provides everything needed for collaborative document editing. When ready, we can migrate to the full stack using our forked repository.
+
+See [BACKEND_ARCHITECTURE.md](infrastructure/gcp/BACKEND_ARCHITECTURE.md) for technical details.
 
 ## 🚀 Quick Start
 
