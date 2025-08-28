@@ -1,0 +1,6 @@
+[submodule "src/appflowy-backend"]
+	path = src/appflowy-backend
+	url = https://github.com/42-Galaxies/AppFlowy-Cloud.git
+[submodule "src/appflowy-frontend"]
+	path = src/appflowy-frontend
+	url = https://github.com/42-Galaxies/AppFlowy.git
