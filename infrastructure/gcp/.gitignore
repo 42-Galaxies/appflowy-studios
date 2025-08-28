@@ -1,0 +1,32 @@
+# Sensitive configuration files
+config/env.sh
+config/.env
+config/*.backup
+config/.passwords.*
+
+# Docker environment files
+docker/.env
+docker/*.env
+!docker/.env.template
+!docker/*.template
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+.DS_Store
+
+# Backup files
+backups/
+*.bak
+*.backup
+
+# SSL certificates
+ssl/
+*.pem
+*.key
+*.crt
+
+# Local testing
+test-local/
+scratch/

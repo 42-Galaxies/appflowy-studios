@@ -25,6 +25,11 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 - **Status**: Backend services running at IP 34.42.130.249
 - **Next Step**: Deploy AppFlowy frontend application
 
+### Security Considerations
+- **env.sh**: Contains sensitive passwords - NOT committed to git (only template)
+- **Firewall**: Currently open on standard ports - need to restrict after domain setup
+- **OAuth**: Google credentials pending configuration for 42galaxies.studio domain
+
 ## Milestones
 
 ### M1: GCP Foundation & Infrastructure Setup (1 Week)
@@ -55,6 +60,13 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 | T2.4 | Configure SSL/TLS with Let's Encrypt. | Must Have | To Do |
 | T2.5 | Test authentication flow and document access. | Must Have | To Do |
 | T2.6 | Set up automated backups for PostgreSQL data. | Should Have | To Do |
+
+### Immediate Next Steps
+1. **Deploy AppFlowy Frontend** - Build and deploy actual AppFlowy web application
+2. **Configure Domain** - Set up workspace.42galaxies.studio to point to 34.42.130.249
+3. **Google OAuth Setup** - Create OAuth credentials restricted to @42galaxies.studio
+4. **SSL/HTTPS** - Configure Let's Encrypt once domain is set up
+5. **Secure Firewall** - Restrict SSH access to specific IPs
 
 ### M3: Local Development with CLI Sync (2-3 Weeks)
 
