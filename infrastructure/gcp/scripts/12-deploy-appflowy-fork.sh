@@ -67,7 +67,19 @@ prepare_deployment_files() {
     # Create custom env file based on deploy.env
     log_info "Creating deployment configuration..."
     
-    cat > deploy.env.custom << EOF
+    # First copy the original deploy.env as base
+    cp deploy.env deploy.env.custom
+    
+    # Then append our custom values
+    cat >> deploy.env.custom << EOF
+
+# Custom configuration for our deployment
+# Required base URLs (these were missing and causing failures)
+SCHEME=http
+FQDN=${vm_ip}
+APPFLOWY_BASE_URL=http://${vm_ip}
+APPFLOWY_WEBSOCKET_BASE_URL=ws://${vm_ip}:8001
+
 # Database
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
@@ -147,11 +159,11 @@ copy_to_vm() {
     local vm_name="${VM_NAME}"
     local zone="${VM_ZONE}"
     
-    # Create directory on VM
+    # Create directory on VM with proper permissions
     gcloud compute ssh "${vm_name}" \
         --zone="${zone}" \
         --project="${PROJECT_ID}" \
-        --command="mkdir -p /opt/appflowy/appflowy-cloud"
+        --command="mkdir -p /opt/appflowy/appflowy-cloud && sudo chown -R \$(whoami):\$(whoami) /opt/appflowy"
     
     # Copy entire backend directory to VM
     log_info "Copying backend files to VM (this may take a few minutes)..."

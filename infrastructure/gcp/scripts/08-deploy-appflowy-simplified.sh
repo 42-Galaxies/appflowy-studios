@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Simplified AppFlowy Backend Deployment
+# 
+# This script deploys a simplified, stable backend stack for AppFlowy.
+# We use this instead of the full AppFlowy Cloud image because:
+# 1. The official image has database migration issues
+# 2. It requires 50+ complex environment variables
+# 3. The simplified stack is more reliable and easier to maintain
+#
+# See infrastructure/gcp/BACKEND_ARCHITECTURE.md for details
+
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -402,11 +412,11 @@ deploy_to_vm() {
     # Copy docker files to VM
     log_info "Copying Docker configuration files to VM..."
     
-    # Create remote directory
+    # Create remote directory with proper permissions
     gcloud compute ssh "${vm_name}" \
         --zone="${zone}" \
         --project="${PROJECT_ID}" \
-        --command="mkdir -p /opt/appflowy/config"
+        --command="mkdir -p /opt/appflowy/config && sudo chown -R \$(whoami):\$(whoami) /opt/appflowy"
     
     # Copy files
     gcloud compute scp \
