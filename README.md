@@ -24,7 +24,9 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 
 ## 📊 Project Progress
 
-### Overall Completion: ██████░░░░ 60% 
+### Overall Completion: ██████░░░░ 60%
+
+📈 **[View Detailed Progress Tracking →](docs/PROJECT_TRACKING.md)** 
 
 ### Milestone 1: GCP Foundation & Infrastructure ✅ COMPLETE
 | Task | Description | Status |
@@ -97,7 +99,13 @@ See [BACKEND_ARCHITECTURE.md](infrastructure/gcp/BACKEND_ARCHITECTURE.md) for te
 
 ## 🚀 Quick Start
 
-### 1. Auto-Setup (Recommended)
+### 1. Check Current Status
+```bash
+cd infrastructure/gcp
+./scripts/99-check-status.sh
+```
+
+### 2. Auto-Setup (For New Deployments)
 ```bash
 cd infrastructure/gcp
 ./setup.sh
@@ -106,7 +114,7 @@ cd infrastructure/gcp
 # Then choose option 11 for full VM deployment
 ```
 
-### 2. Test Deployment
+### 3. Test Deployment
 ```bash
 # Run comprehensive tests
 ./scripts/10-test-deployment.sh
@@ -116,7 +124,7 @@ curl http://34.42.130.249/health
 curl http://34.42.130.249/auth/health
 ```
 
-### 3. Access Services
+### 4. Access Services
 ```bash
 # SSH to VM
 gcloud compute ssh appflowy-workspace --zone=us-central1-a
@@ -147,13 +155,15 @@ appflowy-studios/
 │       │   ├── 08-deploy-appflowy-simplified.sh # Backend deployment
 │       │   ├── 10-test-deployment.sh    # Testing suite
 │       │   ├── 11-deploy-from-submodules.sh # Build from forks
-│       │   └── 12-deploy-appflowy-fork.sh # Deploy fork to server
+│       │   ├── 12-deploy-appflowy-fork.sh # Deploy fork to server
+│       │   └── 99-check-status.sh      # Status check utility
 │       ├── docker/             # Docker configurations
 │       │   ├── docker-compose-simplified.yml
 │       │   └── nginx-simple.conf
 │       └── config/             # Configuration files
 │           └── env.sh.template # Environment template
 ├── docs/                       
+│   ├── PROJECT_TRACKING.md    # Comprehensive progress tracking
 │   └── roadmap/               
 │       └── roadmap.md         # Project roadmap
 └── src/                       # Forked repositories (submodules)
@@ -242,4 +252,5 @@ This is a private project for 42 Galaxies. Team members should:
 
 *Last Updated: 2025-08-28*  
 *Backend Infrastructure: OPERATIONAL*  
-*Frontend Deployment: PENDING*
+*Frontend Deployment: PENDING*  
+*Progress Tracking: [PROJECT_TRACKING.md](docs/PROJECT_TRACKING.md)*
