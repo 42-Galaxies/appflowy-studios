@@ -2,36 +2,59 @@
 
 This document outlines the roadmap and tasks required to deliver the AppFlowy-Studios MVP.
 
+## Implementation Notes
+
+### Infrastructure Implementation (Completed)
+- **Approach Changed**: Instead of Terraform/Kubernetes, we implemented a simpler VM + Docker approach
+- **Scripts Created**: Full deployment automation in `/infrastructure/gcp/scripts/`
+  - `00-auto-configure.sh`: Auto-detects GCP settings and generates secure passwords
+  - `05-create-vm.sh`: Creates Compute Engine VM with static IP (Fixed SCRIPT_DIR issue)
+  - `06-configure-firewall.sh`: Sets up firewall rules for all required ports
+  - `07-install-docker.sh`: Installs Docker and Docker Compose
+  - `08-deploy-appflowy-simplified.sh`: Deploys simplified backend stack
+  - `09-fork-appflowy.sh`: Manages AppFlowy fork
+  - `10-test-deployment.sh`: Comprehensive testing suite
+
+### Backend Architecture (Simplified)
+- **Issue Resolved**: AppFlowy Cloud image had migration/schema issues
+- **Solution**: Deployed simplified backend with core services:
+  - PostgreSQL with pgvector extension
+  - Redis for caching
+  - GoTrue for authentication
+  - Nginx as reverse proxy
+- **Status**: Backend services running at IP 34.42.130.249
+- **Next Step**: Deploy AppFlowy frontend application
+
 ## Milestones
 
-### M1: GCP Foundation & User Authentication (1-2 Weeks)
+### M1: GCP Foundation & Infrastructure Setup (1 Week)
 
-**Goal:** Set up the foundational infrastructure and get authentication working.
+**Goal:** Set up the foundational infrastructure with VM and Docker environment.
 
-**Testable Outcomes:** At the end of this milestone, the authentication service will be running. While there is no user-facing application yet, you can test the authentication flow directly. A developer can make an API call to the service, be redirected to Google to log in, and receive a valid JWT if they are part of the `42galaxies.studio` workspace.
+**Testable Outcomes:** At the end of this milestone, the VM infrastructure will be ready with Docker installed, networking configured, and Google Workspace OAuth credentials prepared for integration.
 
 | Task ID | Description | Priority | Status |
 |---------|-------------|----------|--------|
 | T1.1 | Set up GCP project and billing alerts. | Must Have | ✅ Complete |
-| T1.2 | Write Terraform scripts for GKE, Cloud SQL, and Cloud Storage. | Must Have | To Do |
-| T1.3 | Create the Authentication Service microservice. | Must Have | To Do |
-| T1.4 | Integrate Authentication Service with Google Workspace OAuth. | Must Have | To Do |
-| T1.5 | Set up a basic CI/CD pipeline for the Authentication Service. | Should Have | To Do |
+| T1.2 | Create Compute Engine VM and configure firewall rules. | Must Have | ✅ Complete |
+| T1.3 | Configure DNS for workspace.42galaxies.studio subdomain. | Must Have | To Do |
+| T1.4 | Set up Google Workspace OAuth credentials and domain verification. | Must Have | To Do |
+| T1.5 | Install Docker/Docker Compose on VM. | Must Have | ✅ Complete |
 
-### M2: AppFlowy Cloud Deployment (2-3 Weeks)
+### M2: AppFlowy Deployment with Google Workspace Auth (1-2 Weeks)
 
-**Goal:** Deploy a forked version of AppFlowy and make it accessible.
+**Goal:** Deploy a forked version of AppFlowy with Google Workspace authentication.
 
-**Testable Outcomes:** This is the first point where a user can interact with the full application. A user can navigate to `workspace.42galaxies.studio`, sign in with their Google account, be redirected to the AppFlowy UI, create a new document, and see that it saves correctly.
+**Testable Outcomes:** Users can navigate to `workspace.42galaxies.studio`, sign in with their 42galaxies.studio Google account, and access AppFlowy. They can create, edit, and save documents with all changes persisted.
 
 | Task ID | Description | Priority | Status |
 |---------|-------------|----------|--------|
-| T2.1 | Fork the official AppFlowy repository. | Must Have | To Do |
-| T2.2 | Dockerize the forked AppFlowy backend. | Must Have | To Do |
-| T2.3 | Deploy the AppFlowy backend to the GKE cluster. | Must Have | To Do |
-| T2.4 | Connect the AppFlowy backend to the Cloud SQL database. | Must Have | To Do |
-| T2.5 | Configure Cloudflare and set up the `workspace.42galaxies.studio` subdomain. | Must Have | To Do |
-| T2.6 | Integrate the AppFlowy backend with the Authentication Service. | Must Have | To Do |
+| T2.1 | Fork the official AppFlowy-Cloud repository for customization. | Must Have | ✅ Complete |
+| T2.2 | Configure GoTrue for Google Workspace OAuth (42galaxies.studio only). | Must Have | To Do |
+| T2.3 | Deploy Docker Compose stack (AppFlowy + PostgreSQL + GoTrue). | Must Have | 🔄 In Progress |
+| T2.4 | Configure SSL/TLS with Let's Encrypt. | Must Have | To Do |
+| T2.5 | Test authentication flow and document access. | Must Have | To Do |
+| T2.6 | Set up automated backups for PostgreSQL data. | Should Have | To Do |
 
 ### M3: Local Development with CLI Sync (2-3 Weeks)
 
@@ -61,3 +84,17 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 | T4.4 | Test the mobile authentication flow with our custom auth service. | Must Have | To Do |
 | T4.5 | Test core features (create, edit, sync) on the mobile client. | Must Have | To Do |
 | T4.6 | Document the mobile client setup and configuration process. | Should Have | To Do |
+
+### M5: Production Readiness & Monitoring (1 Week)
+
+**Goal:** Ensure the system is production-ready with proper monitoring, backups, and documentation.
+
+**Testable Outcomes:** The system has automated monitoring, alerting for issues, regular backups that can be restored, and comprehensive documentation for operations.
+
+| Task ID | Description | Priority | Status |
+|---------|-------------|----------|--------|
+| T5.1 | Set up monitoring with Cloud Monitoring/Logging. | Must Have | To Do |
+| T5.2 | Configure automated daily backups with retention policy. | Must Have | To Do |
+| T5.3 | Create runbooks for common operations and issues. | Must Have | To Do |
+| T5.4 | Set up uptime monitoring and alerting. | Should Have | To Do |
+| T5.5 | Document disaster recovery procedures. | Should Have | To Do |

@@ -66,12 +66,18 @@ cd infrastructure/gcp
 
 ### Verify Setup
 ```bash
+# IMPORTANT: Ensure you're authenticated first
+# Authentication tokens expire and need refreshing
+gcloud auth login
+
 # Check project status
 gcloud projects describe galaxies-workspace-42
 
 # Verify all components
 ./setup.sh --verify
 ```
+
+> **⚠️ Authentication Reminder:** If verification fails with auth errors, your gcloud session has likely expired. Run `gcloud auth login` to refresh your credentials.
 
 ## 📁 Project Structure
 

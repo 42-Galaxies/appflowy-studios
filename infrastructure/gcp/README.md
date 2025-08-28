@@ -14,7 +14,16 @@ infrastructure/gcp/
 │   ├── 01-create-project.sh      # GCP project creation
 │   ├── 02-link-billing.sh        # Billing account linking
 │   ├── 03-enable-apis.sh         # API enablement
-│   └── 04-setup-billing-alerts.sh # Billing alerts configuration
+│   ├── 04-setup-billing-alerts.sh # Billing alerts configuration
+│   ├── 05-create-vm.sh           # Create Compute Engine VM
+│   ├── 06-configure-firewall.sh  # Configure firewall rules
+│   ├── 07-install-docker.sh      # Install Docker on VM
+│   └── 08-deploy-appflowy.sh     # Deploy AppFlowy stack
+├── docker/              
+│   ├── docker-compose.yml        # Docker Compose configuration
+│   ├── nginx.conf                # Nginx reverse proxy config
+│   ├── startup-script.sh         # VM startup script
+│   └── .env                      # Docker environment variables
 └── monitoring/          # Monitoring configurations (future use)
 ```
 
@@ -52,19 +61,36 @@ infrastructure/gcp/
    # Edit env.sh with your values
    nano env.sh
    ```
+   
+   **Important:** Generate secure passwords for PostgreSQL and JWT secret:
+   ```bash
+   # Generate secure passwords
+   openssl rand -base64 32  # For POSTGRES_PASSWORD
+   openssl rand -base64 32  # For GOTRUE_JWT_SECRET
+   ```
 
-2. **Run the Setup**
+2. **Run the GCP Project Setup**
    ```bash
    cd infrastructure/gcp
    
    # Make scripts executable
    chmod +x setup.sh scripts/*.sh
    
-   # Run full setup
+   # Run full GCP setup (project, billing, APIs)
    ./setup.sh --full
-   
-   # Or run interactively
+   ```
+
+3. **Deploy AppFlowy on VM**
+   ```bash
+   # Run VM deployment (creates VM, installs Docker, deploys AppFlowy)
    ./setup.sh
+   # Select option 10 for full VM deployment
+   
+   # Or run directly:
+   ./scripts/05-create-vm.sh
+   ./scripts/06-configure-firewall.sh
+   ./scripts/07-install-docker.sh
+   ./scripts/08-deploy-appflowy.sh
    ```
 
 ## 📋 Configuration
@@ -85,6 +111,24 @@ BILLING_ACCOUNT_ID="XXXXXX-XXXXXX-XXXXXX"  # Your billing account ID
 ALERT_EMAIL="your-email@example.com"        # Email for billing alerts
 BUDGET_AMOUNT="100"                         # Monthly budget in USD
 THRESHOLD_PERCENT="50"                      # Alert threshold percentage
+
+# VM Configuration
+VM_NAME="appflowy-workspace"              # VM instance name
+VM_ZONE="us-central1-a"                   # VM zone
+VM_MACHINE_TYPE="e2-medium"               # VM size (e2-medium recommended)
+
+# AppFlowy Configuration
+POSTGRES_PASSWORD="<secure-password>"     # Database password
+GOTRUE_JWT_SECRET="<secure-secret>"       # JWT secret for auth
+APPFLOWY_PORT="8000"                      # AppFlowy API port
+SITE_URL=""                                # Your domain (optional)
+
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID=""                       # From Google Cloud Console
+GOOGLE_CLIENT_SECRET=""                   # From Google Cloud Console
+
+# Security
+SSH_SOURCE_RANGES="YOUR_IP/32"            # Restrict SSH access
 
 # Optional Settings
 ORGANIZATION_ID=""                          # If using organization
@@ -116,18 +160,32 @@ Choose which steps to run:
 ./setup.sh
 ```
 
-Options:
-- `1` - Full setup (all steps)
+**Initial Setup Options:**
+- `1` - Full setup (all GCP steps)
 - `2` - Create GCP project only
 - `3` - Link billing account only
 - `4` - Enable APIs only
 - `5` - Setup billing alerts only
-- `6` - Verify configuration
+
+**VM & AppFlowy Deployment:**
+- `6` - Create VM instance
+- `7` - Configure firewall rules
+- `8` - Install Docker on VM
+- `9` - Deploy AppFlowy stack
+- `10` - Full VM deployment (steps 6-9)
+
+**Management:**
+- `11` - Verify all configuration
+- `12` - Stop AppFlowy services
+- `13` - Start AppFlowy services
+- `14` - View AppFlowy logs
 - `0` - Exit
 
 ### Individual Scripts
 
 Run specific setup steps:
+
+**GCP Setup:**
 ```bash
 # Create project
 ./scripts/01-create-project.sh
@@ -142,11 +200,67 @@ Run specific setup steps:
 ./scripts/04-setup-billing-alerts.sh
 ```
 
+**VM & AppFlowy Deployment:**
+```bash
+# Create VM instance
+./scripts/05-create-vm.sh
+
+# Configure firewall rules
+./scripts/06-configure-firewall.sh
+
+# Install Docker on VM
+./scripts/07-install-docker.sh
+
+# Deploy AppFlowy stack
+./scripts/08-deploy-appflowy.sh
+```
+
 ### Verification
 
 Check your setup status:
 ```bash
 ./setup.sh --verify
+```
+
+## 🚀 AppFlowy Deployment
+
+### Access AppFlowy
+
+After deployment, access your AppFlowy instance:
+
+```bash
+# Get VM external IP
+gcloud compute instances describe appflowy-workspace \
+  --zone=us-central1-a \
+  --format="value(networkInterfaces[0].accessConfigs[0].natIP)"
+```
+
+Access URLs:
+- **Main Application**: `http://VM_IP`
+- **AppFlowy API**: `http://VM_IP:8000`
+- **Auth Service**: `http://VM_IP:9999`
+
+### Managing AppFlowy
+
+```bash
+# SSH to VM
+gcloud compute ssh appflowy-workspace --zone=us-central1-a
+
+# View container status
+cd /opt/appflowy/config
+docker compose ps
+
+# View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+
+# Start services
+docker compose up -d
+
+# Backup database
+docker compose exec postgres pg_dump -U appflowy appflowy > backup.sql
 ```
 
 ## 🔍 What Gets Created
@@ -176,6 +290,20 @@ Check your setup status:
 - Budget alerts at: 50%, 75%, 90%, 100%, 120% of threshold
 - Email notifications to configured address
 - Pub/Sub topic for programmatic integration
+
+### 4. Compute Engine VM
+- Instance type: e2-medium (4GB RAM, 2 vCPU)
+- Ubuntu 22.04 LTS
+- Docker and Docker Compose installed
+- Static IP address reserved
+- Firewall rules for HTTP/HTTPS/SSH
+
+### 5. AppFlowy Stack (Docker Containers)
+- **AppFlowy Cloud**: Main application server
+- **PostgreSQL**: Database for AppFlowy data
+- **GoTrue**: Authentication service (Google OAuth support)
+- **Redis**: Cache and session storage
+- **Nginx**: Reverse proxy for routing
 
 ## 🔄 Idempotency
 
