@@ -1,147 +1,192 @@
-# 🌌 42 Galaxies Workspace
+# 🌌 AppFlowy Studios - 42 Galaxies Workspace
 
 A self-hosted AppFlowy platform with Google Workspace integration, providing collaborative document editing for the 42galaxies.studio team.
 
-## 🚀 Project Overview
+## 🚀 Project Status
 
-**42 Galaxies Workspace** (formerly AppFlowy Studios) is a comprehensive platform that combines:
-- Self-hosted AppFlowy for document collaboration
-- Google Workspace authentication
-- CLI tool for local file synchronization
-- Mobile client support
-- GCP-based infrastructure
+**Backend Infrastructure: ✅ DEPLOYED**  
+**Frontend Application: 🔄 IN PROGRESS**
+
+### Current Deployment
+- **VM IP:** 34.42.130.249
+- **Status Page:** http://34.42.130.249
+- **Services Running:** PostgreSQL, Redis, GoTrue Auth, Nginx
 
 ## 📊 Project Progress
 
-### Overall Completion: █░░░░░░░░░ 12.5% (1/8 tasks)
+### Overall Completion: ████░░░░░░ 40% 
 
-### Milestone 1: GCP Foundation & User Authentication
-**Status:** 🟡 In Progress (20% Complete)
-
+### Milestone 1: GCP Foundation & Infrastructure ✅ COMPLETE
 | Task | Description | Status |
 |------|-------------|--------|
-| T1.1 | Set up GCP project and billing alerts | ✅ **Complete** |
-| T1.2 | Write Terraform scripts for GKE, Cloud SQL, and Cloud Storage | ⏳ To Do |
-| T1.3 | Create the Authentication Service microservice | ⏳ To Do |
-| T1.4 | Integrate Authentication Service with Google Workspace OAuth | ⏳ To Do |
-| T1.5 | Set up a basic CI/CD pipeline for the Authentication Service | ⏳ To Do |
+| T1.1 | Set up GCP project and billing alerts | ✅ Complete |
+| T1.2 | Create Compute Engine VM and configure firewall rules | ✅ Complete |
+| T1.3 | Configure DNS for workspace.42galaxies.studio | 🔄 In Progress |
+| T1.4 | Set up Google Workspace OAuth credentials | ⏳ To Do |
+| T1.5 | Install Docker/Docker Compose on VM | ✅ Complete |
 
-### Upcoming Milestones
-- **M2:** AppFlowy Cloud Deployment (0% - Not Started)
-- **M3:** Local Development with CLI Sync (0% - Not Started)
-- **M4:** Mobile Client Integration (0% - Not Started)
+### Milestone 2: AppFlowy Deployment 🔄 IN PROGRESS
+| Task | Description | Status |
+|------|-------------|--------|
+| T2.1 | Fork AppFlowy-Cloud repository | ✅ Complete |
+| T2.2 | Configure GoTrue for Google OAuth | ⏳ To Do |
+| T2.3 | Deploy Docker Compose stack | 🔄 Backend Done |
+| T2.4 | Configure SSL/TLS with Let's Encrypt | ⏳ To Do |
+| T2.5 | Test authentication flow | ⏳ To Do |
 
-## 🏗️ Infrastructure
+## 🏗️ Infrastructure Details
 
-### GCP Project Details
+### GCP Resources
 - **Project ID:** `galaxies-workspace-42`
-- **Region:** us-central1
-- **Budget:** $10 USD/month with alerts at 50%, 90%, 100%
+- **VM:** `appflowy-workspace` (e2-medium, 4GB RAM)
+- **Static IP:** `34.42.130.249`
+- **Region:** `us-central1-a`
+- **Monthly Budget:** $10 USD with alerts
 
-### Enabled Services
-- ✅ Compute Engine API
-- ✅ Cloud Build API
-- ✅ Secret Manager API
-- ✅ Artifact Registry API
-- ✅ Billing Budgets API
+### Deployed Services
+```
+✅ PostgreSQL (pgvector/pgvector:pg15) - Database with vector support
+✅ Redis (redis:7-alpine) - Caching layer
+✅ GoTrue (supabase/gotrue:v2.151.0) - Authentication service
+✅ Nginx (nginx:alpine) - Reverse proxy
+🔄 AppFlowy Frontend - Coming soon
+```
 
-## 🛠️ Quick Setup
+## 🚀 Quick Start
 
-### Prerequisites
-- Google Cloud SDK (`gcloud` CLI)
-- Active GCP billing account
-- Google Workspace domain (42galaxies.studio)
-
-### Infrastructure Setup
+### 1. Auto-Setup (Recommended)
 ```bash
-# Navigate to infrastructure directory
 cd infrastructure/gcp
+./setup.sh
 
-# Run interactive setup guide
-./guide.sh
-
-# Or run automated setup
-./setup.sh --full
+# Choose option 1 for auto-configuration
+# Then choose option 11 for full VM deployment
 ```
 
-### Verify Setup
+### 2. Test Deployment
 ```bash
-# IMPORTANT: Ensure you're authenticated first
-# Authentication tokens expire and need refreshing
-gcloud auth login
+# Run comprehensive tests
+./scripts/10-test-deployment.sh
 
-# Check project status
-gcloud projects describe galaxies-workspace-42
-
-# Verify all components
-./setup.sh --verify
+# Check service health
+curl http://34.42.130.249/health
+curl http://34.42.130.249/auth/health
 ```
 
-> **⚠️ Authentication Reminder:** If verification fails with auth errors, your gcloud session has likely expired. Run `gcloud auth login` to refresh your credentials.
+### 3. Access Services
+```bash
+# SSH to VM
+gcloud compute ssh appflowy-workspace --zone=us-central1-a
+
+# View logs
+gcloud compute ssh appflowy-workspace --zone=us-central1-a \
+  --command="cd /opt/appflowy/config && docker compose -f docker-compose-simplified.yml logs -f"
+
+# Check container status
+gcloud compute ssh appflowy-workspace --zone=us-central1-a \
+  --command="docker ps"
+```
 
 ## 📁 Project Structure
 
 ```
-42-galaxies-workspace/
-├── README.md                       # This file
-├── .gitignore
-├── docs/                          # Documentation
-│   ├── roadmap/                  # Project roadmap and milestones
-│   │   ├── roadmap.md           # Main roadmap document
-│   │   └── tasks.json           # Task tracking
-│   └── specifications/          # Technical specifications
-│       ├── prd.md              # Product requirements
-│       └── technical-spec.md   # Technical architecture
-├── infrastructure/               # Infrastructure as Code
-│   └── gcp/                    # GCP setup scripts
-│       ├── guide.sh           # Interactive setup guide
-│       ├── setup.sh           # Automated setup
-│       ├── scripts/           # Modular setup scripts
-│       └── config/            # Configuration templates
-├── src/                         # Source code (coming soon)
-│   ├── auth-service/           # Authentication microservice
-│   ├── appflowy-fork/          # Forked AppFlowy
-│   └── cli-tool/               # Local sync CLI
-├── tests/                       # Test files
-└── tools/                       # Development tools
+appflowy-studios/
+├── README.md                     # This file
+├── infrastructure/              
+│   └── gcp/                     # GCP deployment scripts
+│       ├── setup.sh            # Main setup menu
+│       ├── scripts/            # Automation scripts
+│       │   ├── 00-auto-configure.sh     # Auto-detect GCP settings
+│       │   ├── 05-create-vm.sh          # VM creation
+│       │   ├── 06-configure-firewall.sh # Firewall rules
+│       │   ├── 07-install-docker.sh     # Docker installation
+│       │   ├── 08-deploy-appflowy-simplified.sh # Backend deployment
+│       │   └── 10-test-deployment.sh    # Testing suite
+│       ├── docker/             # Docker configurations
+│       │   ├── docker-compose-simplified.yml
+│       │   └── nginx-simple.conf
+│       └── config/             # Configuration files
+│           └── env.sh.template # Environment template
+├── docs/                       
+│   └── roadmap/               
+│       └── roadmap.md         # Project roadmap
+└── src/                       
+    └── appflowy-fork/         # Forked AppFlowy repo
 ```
 
-## 🔄 Development Workflow
+## 🔒 Security
 
-### Current Focus
-Working on **Milestone 1** - Setting up GCP infrastructure and authentication service.
+### Protected Files (NOT in Git)
+- `config/env.sh` - Contains passwords and secrets
+- SSL certificates
+- Google OAuth credentials
 
-### Next Steps
-1. ✅ ~~Set up GCP project and billing~~ **COMPLETE**
-2. 🔄 Write Terraform scripts for infrastructure
-3. ⏳ Develop authentication service
-4. ⏳ Integrate Google Workspace OAuth
+### Public Infrastructure
+- All scripts and templates are safe to share
+- Passwords are auto-generated during setup
+- Firewall rules configured for standard ports
+
+## 📋 Immediate Next Steps
+
+1. **Deploy AppFlowy Frontend** - Build and deploy the actual AppFlowy application
+2. **Configure Domain** - Set up workspace.42galaxies.studio → 34.42.130.249
+3. **Google OAuth** - Create credentials restricted to @42galaxies.studio
+4. **SSL Certificate** - Configure Let's Encrypt for HTTPS
+5. **Restrict SSH** - Lock down to specific IP addresses
+
+## 🧪 Testing
+
+### Quick Health Check
+```bash
+# All-in-one status check
+echo "=== Service Health ==="
+curl -s http://34.42.130.249/health && echo " ✓ Nginx"
+curl -s http://34.42.130.249/auth/health | grep -q GoTrue && echo " ✓ GoTrue"
+echo "=== Container Status ==="
+gcloud compute ssh appflowy-workspace --zone=us-central1-a \
+  --command="docker ps --format 'table {{.Names}}\t{{.Status}}'"
+```
+
+### Comprehensive Test
+```bash
+cd infrastructure/gcp
+./scripts/10-test-deployment.sh
+```
 
 ## 🤝 Contributing
 
 This is a private project for 42 Galaxies. Team members should:
-1. Check the roadmap in `/docs/roadmap/`
-2. Pick a task marked as "To Do"
-3. Create a feature branch
-4. Submit a pull request when complete
+1. Check the roadmap in `/docs/roadmap/roadmap.md`
+2. Review "Immediate Next Steps" above
+3. Test changes locally before pushing
+4. Keep sensitive data out of commits
 
-## 📈 Recent Updates
+## 📈 Recent Accomplishments
 
-### Latest Commit
-- **feat:** Complete GCP infrastructure setup for 42 Galaxies Workspace
-- Task T1.1 complete: GCP project and billing alerts configured
-- Added comprehensive automation scripts and interactive guide
+### Infrastructure Complete ✅
+- Automated GCP project setup with billing alerts
+- VM creation with static IP allocation
+- Docker and Docker Compose installation
+- Simplified backend stack deployment (PostgreSQL, Redis, GoTrue, Nginx)
+- Comprehensive testing suite
+- Auto-configuration using gcloud detection
 
-## 📝 License
+### Issues Resolved
+- Fixed AppFlowy Cloud container migration issues
+- Switched to simplified backend approach
+- Resolved SCRIPT_DIR path issues in deployment scripts
+- Added proper environment variable handling
 
-Private - 42 Galaxies Internal Use Only
+## 🔗 Resources
 
-## 🔗 Links
-
-- **Console:** [GCP Project Dashboard](https://console.cloud.google.com/home/dashboard?project=galaxies-workspace-42)
-- **Domain:** workspace.42galaxies.studio (coming soon)
-- **Documentation:** See `/docs` directory
+- **GCP Console:** [Project Dashboard](https://console.cloud.google.com/home/dashboard?project=galaxies-workspace-42)
+- **VM Status:** http://34.42.130.249
+- **GitHub:** [42-Galaxies/appflowy-studios](https://github.com/42-Galaxies/appflowy-studios)
+- **Domain:** workspace.42galaxies.studio (pending configuration)
+- **Roadmap:** [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md)
 
 ---
 
-*Last Updated: 2025-08-25*
+*Last Updated: 2025-08-28*  
+*Backend Infrastructure: OPERATIONAL*  
+*Frontend Deployment: PENDING*
