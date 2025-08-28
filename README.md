@@ -5,16 +5,20 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 ## 🚀 Project Status
 
 **Backend Infrastructure: ✅ DEPLOYED**  
+**AppFlowy Forks: ✅ INTEGRATED**  
 **Frontend Application: 🔄 IN PROGRESS**
 
 ### Current Deployment
 - **VM IP:** 34.42.130.249
 - **Status Page:** http://34.42.130.249
 - **Services Running:** PostgreSQL, Redis, GoTrue Auth, Nginx
+- **Forked Repositories:** 
+  - Backend: [42-Galaxies/AppFlowy-Cloud](https://github.com/42-Galaxies/AppFlowy-Cloud)
+  - Frontend: [42-Galaxies/AppFlowy](https://github.com/42-Galaxies/AppFlowy)
 
 ## 📊 Project Progress
 
-### Overall Completion: ████░░░░░░ 40% 
+### Overall Completion: █████░░░░░ 50% 
 
 ### Milestone 1: GCP Foundation & Infrastructure ✅ COMPLETE
 | Task | Description | Status |
@@ -28,7 +32,7 @@ A self-hosted AppFlowy platform with Google Workspace integration, providing col
 ### Milestone 2: AppFlowy Deployment 🔄 IN PROGRESS
 | Task | Description | Status |
 |------|-------------|--------|
-| T2.1 | Fork AppFlowy-Cloud repository | ✅ Complete |
+| T2.1 | Fork AppFlowy repositories | ✅ Complete |
 | T2.2 | Configure GoTrue for Google OAuth | ⏳ To Do |
 | T2.3 | Deploy Docker Compose stack | 🔄 Backend Done |
 | T2.4 | Configure SSL/TLS with Let's Encrypt | ⏳ To Do |
@@ -92,6 +96,7 @@ gcloud compute ssh appflowy-workspace --zone=us-central1-a \
 ```
 appflowy-studios/
 ├── README.md                     # This file
+├── .gitmodules                   # Git submodule configuration
 ├── infrastructure/              
 │   └── gcp/                     # GCP deployment scripts
 │       ├── setup.sh            # Main setup menu
@@ -101,7 +106,9 @@ appflowy-studios/
 │       │   ├── 06-configure-firewall.sh # Firewall rules
 │       │   ├── 07-install-docker.sh     # Docker installation
 │       │   ├── 08-deploy-appflowy-simplified.sh # Backend deployment
-│       │   └── 10-test-deployment.sh    # Testing suite
+│       │   ├── 10-test-deployment.sh    # Testing suite
+│       │   ├── 11-deploy-from-submodules.sh # Build from forks
+│       │   └── 12-deploy-appflowy-fork.sh # Deploy fork to server
 │       ├── docker/             # Docker configurations
 │       │   ├── docker-compose-simplified.yml
 │       │   └── nginx-simple.conf
@@ -110,8 +117,9 @@ appflowy-studios/
 ├── docs/                       
 │   └── roadmap/               
 │       └── roadmap.md         # Project roadmap
-└── src/                       
-    └── appflowy-fork/         # Forked AppFlowy repo
+└── src/                       # Forked repositories (submodules)
+    ├── appflowy-backend/      # AppFlowy-Cloud fork
+    └── appflowy-frontend/     # AppFlowy fork
 ```
 
 ## 🔒 Security
@@ -128,11 +136,11 @@ appflowy-studios/
 
 ## 📋 Immediate Next Steps
 
-1. **Deploy AppFlowy Frontend** - Build and deploy the actual AppFlowy application
+1. **Configure and Deploy Frontend** - Build AppFlowy frontend from our fork at `src/appflowy-frontend/`
 2. **Configure Domain** - Set up workspace.42galaxies.studio → 34.42.130.249
-3. **Google OAuth** - Create credentials restricted to @42galaxies.studio
+3. **Google OAuth Setup** - Create OAuth credentials restricted to @42galaxies.studio
 4. **SSL Certificate** - Configure Let's Encrypt for HTTPS
-5. **Restrict SSH** - Lock down to specific IP addresses
+5. **Production Configuration** - Update environment variables for production use
 
 ## 🧪 Testing
 
@@ -170,6 +178,12 @@ This is a private project for 42 Galaxies. Team members should:
 - Simplified backend stack deployment (PostgreSQL, Redis, GoTrue, Nginx)
 - Comprehensive testing suite
 - Auto-configuration using gcloud detection
+
+### AppFlowy Fork Integration ✅
+- Forked both AppFlowy repositories to 42-Galaxies organization
+- Added forks as git submodules for version control
+- Created deployment scripts for fork-based deployment
+- Full control over both backend and frontend codebases
 
 ### Issues Resolved
 - Fixed AppFlowy Cloud container migration issues

@@ -23,7 +23,14 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
   - GoTrue for authentication
   - Nginx as reverse proxy
 - **Status**: Backend services running at IP 34.42.130.249
-- **Next Step**: Deploy AppFlowy frontend application
+- **Forks Integrated**: Both AppFlowy and AppFlowy-Cloud forked to 42-Galaxies org
+- **Next Step**: Deploy AppFlowy frontend from our fork
+
+### Fork Integration (Complete)
+- **Backend Fork**: https://github.com/42-Galaxies/AppFlowy-Cloud (submodule at `src/appflowy-backend/`)
+- **Frontend Fork**: https://github.com/42-Galaxies/AppFlowy (submodule at `src/appflowy-frontend/`)
+- **Deployment Script**: `12-deploy-appflowy-fork.sh` deploys from our forks
+- **Version Control**: Git submodules track exact versions for reproducible deployments
 
 ### Security Considerations
 - **env.sh**: Contains sensitive passwords - NOT committed to git (only template)
@@ -54,7 +61,7 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 
 | Task ID | Description | Priority | Status |
 |---------|-------------|----------|--------|
-| T2.1 | Fork the official AppFlowy-Cloud repository for customization. | Must Have | 🔄 Ready (needs GitHub fork) |
+| T2.1 | Fork the official AppFlowy repositories for customization. | Must Have | ✅ Complete |
 | T2.2 | Configure GoTrue for Google Workspace OAuth (42galaxies.studio only). | Must Have | To Do |
 | T2.3 | Deploy Docker Compose stack (AppFlowy + PostgreSQL + GoTrue). | Must Have | 🔄 In Progress |
 | T2.4 | Configure SSL/TLS with Let's Encrypt. | Must Have | To Do |
@@ -62,15 +69,13 @@ This document outlines the roadmap and tasks required to deliver the AppFlowy-St
 | T2.6 | Set up automated backups for PostgreSQL data. | Should Have | To Do |
 
 ### Immediate Next Steps
-1. **Fork AppFlowy Repositories** on GitHub:
-   - Fork https://github.com/AppFlowy-IO/AppFlowy-Cloud to 42-Galaxies/AppFlowy-Cloud
-   - Fork https://github.com/AppFlowy-IO/AppFlowy to 42-Galaxies/AppFlowy
-   - Run `./setup-submodules.sh` to add as git submodules
-2. **Deploy AppFlowy Frontend** - Build and deploy from submodules using `11-deploy-from-submodules.sh`
-3. **Configure Domain** - Set up workspace.42galaxies.studio to point to 34.42.130.249
-4. **Google OAuth Setup** - Create OAuth credentials restricted to @42galaxies.studio
-5. **SSL/HTTPS** - Configure Let's Encrypt once domain is set up
-6. **Secure Firewall** - Restrict SSH access to specific IPs
+1. **Deploy AppFlowy Frontend** ✅ Forks created as submodules in `src/`
+   - Build frontend from `src/appflowy-frontend/`
+   - Deploy using `scripts/12-deploy-appflowy-fork.sh`
+2. **Configure Domain** - Set up workspace.42galaxies.studio to point to 34.42.130.249
+3. **Google OAuth Setup** - Create OAuth credentials restricted to @42galaxies.studio
+4. **SSL/HTTPS** - Configure Let's Encrypt once domain is set up
+5. **Production Environment** - Update configuration for production use
 
 ### M3: Local Development with CLI Sync (2-3 Weeks)
 
